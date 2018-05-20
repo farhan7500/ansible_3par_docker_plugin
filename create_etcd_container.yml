@@ -1,0 +1,31 @@
+---
+- name: Create etcd container for 3PAR Docker Volume plugin
+  hosts: etcd_hosts
+  become: no
+  environment:
+    #comment out no_proxy if not behind proxy
+    no_proxy: localhost, 10.10.1.150, 10.10.1.151
+
+  tasks:
+    - name: load etcd settings
+      include_vars: 'properties/etcd_properties.yml'
+
+    - name: run etcd container
+      docker:
+      name: etcd
+      image: "{{ etcd_image }}"
+      state: reloaded
+      detach: true
+      ports:
+        - "2380:2380"
+        - "2379:2379"
+      env:
+        ETCD_NAME: "{{ etcd_name }}"
+        ETCD_ADVERTISE_CLIENT_URLS: "{{ etcd_advertise_client_urls }}"
+        ETCD_LISTEN_CLIENT_URLS: "{{ etcd_listen_client_urls }}"
+        ETCD_INITIAL_ADVERTISE_PEER_URLS: "{{ etcd_initial_advertise_peer_urls }}"
+        ETCD_LISTEN_PEER_URLS: "{{ etcd_listen_peer_urls }}"
+        ETCD_INITIAL_CLUSTER: "{{ etcd_initial_cluster }}"
+        ETCD_INITIAL_CLUSTER_TOKEN: "{{ etcd_initial_cluster_token }}"
+        ETCD_INITIAL_CLUSTER_STATE: "{{ etcd_initial_cluster_state }}"
+      restart_policy: always
