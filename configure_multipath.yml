@@ -18,3 +18,12 @@
         owner: root
         group: root
         mode: 0644
+
+    - name: enable service multipathd, if not running
+      service:
+        name: {{ item }}
+        enabled: yes
+        state: enabled
+      with_items:
+        - iscsid
+        - multipathd

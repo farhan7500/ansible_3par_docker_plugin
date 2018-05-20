@@ -21,4 +21,12 @@
         group: root
         mode: 0644
 
+    - name: enable service multipathd, if not running
+      service:
+        name: {{ item }}
+        enabled: yes
+        state: enabled
+      with_items:
+        - open-iscsi
+        - multipath-tools
 #    - name: Configure multipath.conf
