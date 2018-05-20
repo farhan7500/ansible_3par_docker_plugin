@@ -1,0 +1,24 @@
+---
+- name: Configure multipath
+  hosts: localhost
+  become: root
+
+  tasks:
+    - name: install multipath dependencies
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+
+    - name: configure multipath.conf
+      copy:
+        src: files/multipath.conf
+        dest: /etc/multipath.conf
+        owner: root
+        group: root
+        mode: 0644
+
+#    - name: Configure multipath.conf
