@@ -12,6 +12,8 @@
         - ca-certificates
         - curl
         - software-properties-common
+        - multipath-tools
+        - open-iscsi
 
     - name: configure multipath.conf
       copy:
@@ -22,10 +24,8 @@
         mode: 0644
 
     - name: enable service multipathd, if not running
-      service:
-        name: {{ item }}
-        enabled: yes
-        state: enabled
+      action: >
+        service name={{ item }} state=present name={{ item }} enabled=yes state=started
       with_items:
         - open-iscsi
         - multipath-tools
