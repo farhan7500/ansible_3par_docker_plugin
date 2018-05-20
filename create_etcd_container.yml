@@ -8,7 +8,7 @@
       include_vars: 'properties/etcd_properties.yml'
 
     - name: run etcd container
-      docker:
+      docker_container:
       name: etcd
       image: "{{ etcd_image }}"
       state: reloaded
