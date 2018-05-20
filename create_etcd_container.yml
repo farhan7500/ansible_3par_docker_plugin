@@ -17,12 +17,13 @@
       state: reloaded
       detach: true
       ports:
-        - "2380:2380"
-        - "2379:2379"
+        - "23800:23800"
+        - "23790:23790"
+        - "40010:40010"
       env:
         ETCD_NAME: "{{ etcd_name }}"
-        ETCD_ADVERTISE_CLIENT_URLS: "{{ etcd_advertise_client_urls }}"
-        ETCD_LISTEN_CLIENT_URLS: "{{ etcd_listen_client_urls }}"
+        ETCD_ADVERTISE_CLIENT_URLS: "{{ etcd_advertise_client_url_1 }},{{ etcd_advertise_client_url_2 }}"
+        ETCD_LISTEN_CLIENT_URLS: "{{ etcd_listen_client_url_1 }},{{ etcd_listen_client_url_2 }}"
         ETCD_INITIAL_ADVERTISE_PEER_URLS: "{{ etcd_initial_advertise_peer_urls }}"
         ETCD_LISTEN_PEER_URLS: "{{ etcd_listen_peer_urls }}"
         ETCD_INITIAL_CLUSTER: "{{ etcd_initial_cluster }}"
