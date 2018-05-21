@@ -8,25 +8,19 @@
       prompt: "Configure for FC or iSCSI? Type: 'fc' or 'iscsi'."
       private: no
       default: "fc"
-          
+
   tasks:
     - name: Creates HPE Docker plugin directory
       file:
         path: /etc/hpedockerplugin
         state: directory
-        mode: 0775
+        mode: 0755
         recurse: yes
 
     - name: "Copy hpe.conf - iSCSI"
-      action: copy src=files/iSCSI_hpe.conf dest=/etc/hpedockerplugin/hpe.conf
-        owner: root
-        group: root
-        mode: 0644
+      action: copy src=files/iSCSI_hpe.conf dest=/etc/hpedockerplugin/hpe.conf owner=root group=root mode=0755
       when: storage_config == "iscsi"
 
     - name: "Copy hpe.conf - FC"
-      action: copy src=files/FC_hpe.conf dest=/etc/hpedockerplugin/hpe.conf
-        owner: root
-        group: root
-        mode: 0644
+      action: copy src=files/FC_hpe.conf dest=/etc/hpedockerplugin/hpe.conf owner=root group=root mode=0755
       when: storage_config == "fc"
