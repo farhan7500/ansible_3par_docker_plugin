@@ -35,5 +35,8 @@
     - name: Create 3PAR Docker Volume plugin
       include: tasks/create_3par_docker_volume_plugin.yml
 
+    - name: Create the hpe_sock files
+      include: tasks/hpe_sock.yml
+
     - name: Deploy FlexVolume drivers
       include: tasks/deploy_FlexVolume_driver
