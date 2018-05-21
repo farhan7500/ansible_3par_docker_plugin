@@ -8,33 +8,6 @@
       prompt: "Configure for FC or iSCSI? Type: 'fc' or 'iscsi'."
       private: no
       default: "fc"
-
-    - name: "etcd_ip"
-      prompt: "Enter IP for etcd service"
-      private: no
-
-    - name: "etcd_port"
-      prompt: "Enter etcd port"
-      private: no
-      default: "23790"
-
-    - name: "3par_ip"
-      prompt: "Enter HPE 3PAR IP Address"
-      private: no
-
-    - name: "3par_user"
-      prompt: "Enter HPE 3PAR username"
-      private: no
-
-    - name: "3par_password"
-      prompt: "Enter HPE 3PAR password"
-      private: yes
-
-    - name: "default_cpg"
-      prompt: "Default CPG"
-      private: no
-      default: "FC_r6"
-
           
   tasks:
     - name: Creates HPE Docker plugin directory
@@ -44,9 +17,16 @@
         mode: 0775
         recurse: yes
 
-    - name: "shut down Debian flavored systems"
-      action: copy src=files/multipath.conf dest=/etc/hpe.conf
+    - name: "Copy hpe.conf - iSCSI"
+      action: copy src=files/iSCSI_hpe.conf dest=/etc/hpedockerplugin/hpe.conf
         owner: root
         group: root
         mode: 0644
       when: storage_config == "iscsi"
+
+    - name: "Copy hpe.conf - FC"
+      action: copy src=files/FC_hpe.conf dest=/etc/hpedockerplugin/hpe.conf
+        owner: root
+        group: root
+        mode: 0644
+      when: storage_config == "fc"
