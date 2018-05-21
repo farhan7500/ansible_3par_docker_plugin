@@ -1,4 +1,6 @@
 ---
+
+# DO Not use
 - name: Configure docker service
   hosts: localhost
   become: root
@@ -35,7 +37,6 @@
       private: no
       default: "FC_r6"
 
-          
   tasks:
     - name: Creates HPE Docker plugin directory
       file:
@@ -43,6 +44,13 @@
         state: directory
         mode: 0775
         recurse: yes
+
+    - name: "Copy iSCSI hpe.conf"
+      action: copy src=files/multipath.conf dest=/etc/hpe.conf
+        owner: root
+        group: root
+        mode: 0644
+      when: storage_config == "iscsi"
 
     - name: "shut down Debian flavored systems"
       action: copy src=files/multipath.conf dest=/etc/hpe.conf
