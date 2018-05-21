@@ -1,0 +1,39 @@
+---
+- name: Create initial host groups for localhost
+  hosts: localhost
+  connection: local
+  become: root
+  gather_facts: no
+
+  vars:
+    driver_path: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/hpe.com~hpe/"
+
+  vars_prompt:
+    - name: "storage_config"
+      prompt: "Configure for FC or iSCSI? Type: 'fc' or 'iscsi'."
+      private: no
+      default: "fc"
+
+    - name: "start_doryd"
+      prompt: "Is this a master node? (yes/no)"
+      private: no
+      default: "no"
+
+  tasks:
+    - name: Create etcd container for 3PAR Docker Volume plugin
+      include: tasks/create_etcd_container.yml
+
+    - name: Configure multipath
+      include: tasks/configure_multipath.yml
+
+    - name: Configure docker service
+      include: tasks/configure_docker_service.yml
+
+    - name: Copy hpe.conf
+      include: tasks/copy_hpe_conf.yml
+
+    - name: Create 3PAR Docker Volume plugin
+      include: tasks/create_3par_docker_volume_plugin.yml
+
+    - name: Deploy FlexVolume drivers
+      include: tasks/deploy_FlexVolume_driver
