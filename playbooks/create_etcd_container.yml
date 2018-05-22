@@ -1,6 +1,6 @@
 ---
 - name: Create etcd container for 3PAR Docker Volume plugin
-  hosts: localhost
+  hosts: etcd
   become: no
 
   tasks:
