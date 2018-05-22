@@ -1,7 +1,12 @@
 [DEFAULT]
 ssh_hosts_key_file = /root/.ssh/known_hosts
 
-#change to match Master host IP where etcd is running
+# IP Address and port number of the etcd instance
+# to use for storing volume meta data
+# for setting up etcd client with cluster members give host_etcd_ip_address in this
+# below format where each member's ip/port is given with comma as delimiter.
+# For example, host_etcd_ip_address = 10.50.180.1:2379,10.50.164.1:2379,10.50.198.1:2379
+# Comment out host_etcd_port_number when specifying port with IP
 host_etcd_ip_address = <Master Node IP>
 
 #Modify to match the port configured in etcd (2379 or 23790)
