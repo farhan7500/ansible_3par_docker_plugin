@@ -1,7 +1,7 @@
 ---
 - name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
   hosts: etcd
-  become: no
+  become: root
 
   tasks:
     - name: Create etcd container for 3PAR Docker Volume plugin
@@ -51,5 +51,4 @@
 
   tasks:
     - name: Start Dynamic Provisioner (doryd) on Master node
-      shell: nohup /usr/libexec/kubernetes/kubelet-plugins/volume/exec/hpe.com~hpe/doryd /etc/kubernetes/admin.conf hpe.com &
-      when: start_doryd == "yes"
+      include: tasks/configure_doryd_service.yml
