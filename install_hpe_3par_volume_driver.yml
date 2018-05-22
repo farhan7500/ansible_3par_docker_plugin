@@ -1,5 +1,14 @@
 ---
-- name: Create initial host groups for localhost
+- name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
+  hosts: etcd
+  become: no
+
+  tasks:
+    - name: Create etcd container for 3PAR Docker Volume plugin
+      include: tasks/create_etcd_container.yml
+
+
+- name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
   hosts: localhost
   connection: local
   become: root
@@ -20,9 +29,6 @@
       default: "no"
 
   tasks:
-    - name: Create etcd container for 3PAR Docker Volume plugin
-      include: tasks/create_etcd_container.yml
-
     - name: Configure multipath
       include: tasks/configure_multipath.yml
 

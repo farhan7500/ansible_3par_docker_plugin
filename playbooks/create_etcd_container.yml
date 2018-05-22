@@ -5,7 +5,7 @@
 
   tasks:
     - name: load etcd settings
-      include_vars: 'properties/etcd_properties.yml'
+      include_vars: '../properties/etcd_cluster_properties.yml'
 
     - name: run etcd container
       docker_container:
