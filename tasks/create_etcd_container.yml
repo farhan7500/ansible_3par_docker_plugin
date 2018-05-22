@@ -21,4 +21,4 @@
         ETCD_INITIAL_CLUSTER: "{{ etcd_initial_cluster }}"
         ETCD_INITIAL_CLUSTER_TOKEN: "{{ etcd_initial_cluster_token }}"
         ETCD_INITIAL_CLUSTER_STATE: "{{ etcd_initial_cluster_state }}"
-      
+      restart_policy: always
