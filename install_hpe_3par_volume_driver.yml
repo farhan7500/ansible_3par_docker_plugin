@@ -45,4 +45,4 @@
       include: tasks/hpe_sock.yml
 
     - name: Deploy FlexVolume drivers
-      include: tasks/deploy_FlexVolume_driver
+      include: tasks/deploy_FlexVolume_driver.yml
