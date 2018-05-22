@@ -13,4 +13,4 @@ Run
 $ ansible-playbook -i hosts install_hpe_3par_volume_driver.yml
 ```
 
-**Make sure proxy and no_proxy is configured correctly**
+**Make sure proxy and no_proxy are configured correctly**
