@@ -26,7 +26,7 @@
       owner: root
       mode: 0755
       with_fileglob:
-        - ../files/dory/*
+        - "../files/dory/*"
 
   - name: Start Dynamic Provisioner (doryd) on Master node
     command: nohup {{ driver_path }} /root/.kube/config hpe.com &
