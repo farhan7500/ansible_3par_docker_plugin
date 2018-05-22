@@ -1,4 +1,12 @@
 ---
+- name: Set MountFlags in docker service
+  hosts: all
+  become: root
+
+  tasks:
+    - name: Configure docker service
+      include: tasks/configure_docker_service.yml
+
 - name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
   hosts: etcd
   become: root
@@ -24,9 +32,6 @@
   tasks:
     - name: Configure multipath
       include: tasks/configure_multipath.yml
-
-    - name: Configure docker service
-      include: tasks/configure_docker_service.yml
 
     - name: Copy hpe.conf
       include: tasks/copy_hpe_conf.yml
