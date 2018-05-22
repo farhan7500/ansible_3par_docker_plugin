@@ -9,10 +9,8 @@
 
 
 - name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
-  hosts: localhost
-  connection: local
+  hosts: all
   become: root
-  gather_facts: no
 
   vars:
     driver_path: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/hpe.com~hpe/"
@@ -46,3 +44,19 @@
 
     - name: Deploy FlexVolume drivers
       include: tasks/deploy_FlexVolume_driver.yml
+
+
+- name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
+  hosts: localhost
+  become: root
+
+  vars_prompt:
+    - name: "start_doryd"
+      prompt: "Is this a master node? (yes/no)"
+      private: no
+      default: "yes"
+
+  tasks:
+    - name: Start Dynamic Provisioner (doryd) on Master node
+      command: nohup {{ driver_path }}/doryd /etc/kubernetes/admin.conf hpe.com &
+      when: start_doryd == "yes"
