@@ -3,7 +3,7 @@
     docker_container:
       name: plugin_container
       image: hpestorage/legacyvolumeplugin:2.1
-      networkmode: host
+      network_mode: host
       privileged: true
       state: started
       detach: true

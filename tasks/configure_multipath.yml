@@ -1,7 +1,6 @@
 ---
   - name: install multipath dependencies
-    action: >
-      {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+    yum: pkg={{ item }} state=installed
     with_items:
       - iscsi-initiator-utils
       - device-mapper-multipath
