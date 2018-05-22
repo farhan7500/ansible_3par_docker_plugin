@@ -26,7 +26,7 @@
     - name: "start_doryd"
       prompt: "Is this a master node? (yes/no)"
       private: no
-      default: "no"
+      default: "yes"
 
   tasks:
     - name: Configure multipath
