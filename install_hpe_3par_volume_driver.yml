@@ -7,12 +7,12 @@
     - name: Configure docker service
       include: tasks/configure_docker_service.yml
 
-- name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
+- name: Create etcd cluster
   hosts: etcd
   become: root
 
   tasks:
-    - name: Create etcd container for 3PAR Docker Volume plugin
+    - name: Create etcd cluster for 3PAR Docker Volume plugin
       include: tasks/create_etcd_container.yml
 
 
