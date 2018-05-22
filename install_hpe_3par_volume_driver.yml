@@ -46,16 +46,10 @@
       include: tasks/deploy_FlexVolume_driver.yml
 
 - name: Install HPE 3PAR Volume Driver for Kubernetes/OpenShift
-  hosts: localhost
+  hosts: masters
   become: root
-
-  vars_prompt:
-    - name: "start_doryd"
-      prompt: "Is this a master node? (yes/no)"
-      private: no
-      default: "yes"
 
   tasks:
     - name: Start Dynamic Provisioner (doryd) on Master node
-      command: "/usr/libexec/kubernetes/kubelet-plugins/volume/exec/hpe.com~hpe/doryd /etc/kubernetes/admin.conf hpe.com"
+      shell: nohup /usr/libexec/kubernetes/kubelet-plugins/volume/exec/hpe.com~hpe/doryd /etc/kubernetes/admin.conf hpe.com &
       when: start_doryd == "yes"
