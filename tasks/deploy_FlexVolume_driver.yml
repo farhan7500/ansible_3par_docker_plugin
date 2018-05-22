@@ -4,7 +4,7 @@
 
   - name: Create FlexVolume driver directory
     file:
-      path: {{ item }}
+      path: "{{ item }}"
       state: directory
       mode: 0644
       recurse: yes
