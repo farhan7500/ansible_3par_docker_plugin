@@ -3,6 +3,6 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
  name: sc-comp3
-provisioner: dev.hpe.com/hpe
+provisioner: hpe.com/hpe
 parameters:
   size: "16"
