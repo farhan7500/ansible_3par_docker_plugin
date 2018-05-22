@@ -21,11 +21,6 @@
       private: no
       default: "fc"
 
-    - name: "start_doryd"
-      prompt: "Is this a master node? (yes/no)"
-      private: no
-      default: "yes"
-
   tasks:
     - name: Configure multipath
       include: tasks/configure_multipath.yml
