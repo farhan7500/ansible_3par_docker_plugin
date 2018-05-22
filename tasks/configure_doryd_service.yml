@@ -1,8 +1,8 @@
 ---
-  - name: create doryd service 
+  - name: create doryd service
     copy:
-      src: files/doryd.service
-      dest: /etc/systemd/system
+      src: ../files/doryd.service
+      dest: /etc/systemd/system/
       owner: root
       group: root
       mode: 0755
