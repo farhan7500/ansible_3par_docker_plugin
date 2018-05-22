@@ -15,5 +15,3 @@ $ ansible-playbook -i hosts install_hpe_3par_volume_driver.yml
 
 Known-issues:
   - playbook hangs on starting doryd but can start manually
-
-
