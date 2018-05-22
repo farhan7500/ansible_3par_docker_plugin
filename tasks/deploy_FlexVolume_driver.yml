@@ -16,14 +16,14 @@
     copy:
       src: /root/.kube/config
       dest: /etc/kubernetes/admin.conf
-      owner: root
+      owner: "root"
       mode: 0755
 
   - name: Install FlexVolume drivers
     copy:
       src: "{{ item }}"
       dest: "{{ driver_path }}"
-      owner: root
+      owner: "root"
       mode: 0755
       with_fileglob:
         - "../files/dory/*"
