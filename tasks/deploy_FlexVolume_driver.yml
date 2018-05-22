@@ -9,7 +9,7 @@
       mode: 0644
       recurse: yes
     with_items:
-      - {{ driver_path }}
+      - "{{ driver_path }}"
       - /etc/kubernetes/
 
   - name: Verify /etc/kubernetes/admin.conf exists
