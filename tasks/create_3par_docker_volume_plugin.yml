@@ -21,4 +21,3 @@
         - /lib64:/lib64
         - /var/run/docker.sock:/var/run/docker.sock
         - /opt/hpe/data:/opt/hpe/data:rshared
-      restart_policy: always
