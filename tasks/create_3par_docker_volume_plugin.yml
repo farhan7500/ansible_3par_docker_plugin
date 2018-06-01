@@ -4,6 +4,7 @@
       name: plugin_container
       image: hpestorage/legacyvolumeplugin:2.1
       privileged: true
+      network_mode: host
       state: started
       detach: true
       volumes:
