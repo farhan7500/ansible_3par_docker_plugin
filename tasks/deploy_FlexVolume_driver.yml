@@ -12,9 +12,17 @@
       - "{{ driver_path }}"
       - /etc/kubernetes/
 
+  - name: Copy over the kube config file into /tmp
+    fetch:
+      src: /root/.kube/config
+      dest: /tmp/config
+      flat: yes
+    when: inventory_hostname in groups['masters']
+
+
   - name: Verify /etc/kubernetes/admin.conf exists
     copy:
-      src: /root/.kube/config
+      src: /tmp/config
       dest: /etc/kubernetes/admin.conf
       owner: "root"
       mode: 0755
