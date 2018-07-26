@@ -32,6 +32,7 @@
         dest: /etc/kubernetes/admin.conf
         owner: root
         mode: 0755
+        remote_src: yes
 
     - name: Install FlexVolume drivers
       copy:
