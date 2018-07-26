@@ -1,4 +1,16 @@
 ---
+- name: Install prerequisites
+  hosts: all
+  become: root
+  
+  environment:
+    http_proxy: "http://proxy.example.com:80"
+    https_proxy: "hhttp://proxy.example.com:80"
+  
+  tasks:
+    - name: Install prerequistes
+      include: tasks/install_prerequisites.yml
+
 - name: Set MountFlags in docker service
   hosts: all
   become: root
