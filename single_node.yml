@@ -15,7 +15,7 @@
     with_items: 
       - open-iscsi
       - multipath-tools
-    when: "'{{ ansible_distribution }}' == 'Ubuntu'"
+    when: ansible_distribution == 'Ubuntu'
     become: yes
     
   - name: Install packages on CentOS
@@ -25,14 +25,14 @@
     with_items: 
       - iscsi-initiator-utils
       - device-mapper-multipath
-    when: "'{{ ansible_distribution }}' == 'CentOS'"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
     
   - name: Copy multipath configuration file
     copy:
       src: multipath.conf
       dest: /etc/multipath.conf
-    when: "'{{ ansible_distribution }}' == 'CentOS'"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
     
   - name: Change MountFlags
@@ -43,7 +43,7 @@
       value: shared 
       no_extra_spaces: true 
       backup: yes
-    when: "'{{ ansible_distribution }}' == 'CentOS'"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
     
   - name: Reload sytemd daemon
@@ -59,14 +59,14 @@
       - open-iscsi
       - multipath-tools
       - docker
-    when: "'{{ ansible_distribution }}' == 'Ubuntu'"
+    when: ansible_distribution == 'Ubuntu'
     become: yes
     
   - name: Restart Services
     systemd:
       name: docker.service
       state: restarted
-    when: "'{{ ansible_distribution }}' == 'CentOS'"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
     
   - name: Enable the services
@@ -77,7 +77,7 @@
     with_items:
       - iscsid
       - multipathd
-    when: "'{{ ansible_distribution }}' == 'CentOS'"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
     
   - name: load etcd settings
