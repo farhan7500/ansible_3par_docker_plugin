@@ -1,74 +1,105 @@
 - hosts: all
-    
+
   environment:
     http_proxy: "http://web-proxy.in.hpecorp.net:8080"
     https_proxy: "http://web-proxy.in.hpecorp.net:8080"
-    
+
   tasks:
+  
+  - name: load plugin settings
+    include_vars: 'properties/plugin_configuration_properties.yml'
+
+  - name: get the iscsi ports
+    local_action: shell /usr/bin/sshpass -p {{ hpe3par_password }} ssh -oStrictHostKeyChecking=no {{ hpe3par_username }}@{{ hpe3par_ip }} "showport -iscsi" | grep ready | awk '{print $3}'
+    register: result
+    
+  - name: Creates HPE Docker plugin directory
+    file:
+      path: /etc/hpedockerplugin
+      state: directory
+      mode: 0644
+      recurse: yes
+    become: yes
+    
+  - name: Populate hpe.conf
+    ini_file:
+      path: /etc/hpedockerplugin/hpe.conf
+      section: DEFAULT
+      option: {{ item.option }}
+      value: {{ item.value }}
+    with_items:
+      - { option: "ssh_hosts_key_file", value: {{ ssh_hosts_key_file }} }"
+      - { option: "host_etcd_port_number", value: host_etcd_port_number" }"
+      - { option: "enabled", value: "false" }
+
+  - name: print ports
+    debug:
+      msg: "{{ result['stdout_lines'] }}"
+
   - name: Install prerequistes
     include: tasks/install_prerequisites.yml
-    
+
   - name: Install packages on Ubuntu
-    package: 
+    package:
       name: "{{ item }}"
       state: present
-    with_items: 
+    with_items:
       - open-iscsi
       - multipath-tools
     when: ansible_distribution == 'Ubuntu'
     become: yes
-    
-  - name: Install packages on CentOS
-    package: 
+
+  - name: Install packages on CentOS/RedHat
+    package:
       name: "{{ item }}"
       state: present
-    with_items: 
+    with_items:
       - iscsi-initiator-utils
       - device-mapper-multipath
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
-    
+
   - name: Copy multipath configuration file
     copy:
       src: multipath.conf
       dest: /etc/multipath.conf
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
-    
+
   - name: Change MountFlags
-    ini_file: 
-      dest: /usr/lib/systemd/system/docker.service 
-      section: Service 
-      option: MountFlags 
-      value: shared 
-      no_extra_spaces: true 
+    ini_file:
+      dest: /usr/lib/systemd/system/docker.service
+      section: Service
+      option: MountFlags
+      value: shared
+      no_extra_spaces: true
       backup: yes
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
-    
+
   - name: Reload sytemd daemon
     systemd:
       daemon_reload: yes
     become: yes
-    
+
   - name: Restart Services
     systemd:
       name: "{{ item }}"
       state: restarted
-    with_items: 
+    with_items:
       - open-iscsi
       - multipath-tools
       - docker
     when: ansible_distribution == 'Ubuntu'
     become: yes
-    
+
   - name: Restart Services
     systemd:
       name: docker.service
       state: restarted
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
-    
+
   - name: Enable the services
     systemd:
       name: "{{  item  }}"
@@ -79,10 +110,10 @@
       - multipathd
     when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
     become: yes
-    
+
   - name: load etcd settings
     include_vars: 'properties/etcd_cluster_properties.yml'
-    
+
   - name: run etcd container
     docker_container:
       name: etcd
@@ -104,15 +135,7 @@
         ETCD_INITIAL_CLUSTER_STATE: "{{ etcd_initial_cluster_state }}"
       restart_policy: always
     become: yes
-    
-  - name: Creates HPE Docker plugin directory
-    file:
-      path: /etc/hpedockerplugin
-      state: directory
-      mode: 0644
-      recurse: yes
-    become: yes
-  
+
   - name: "Copy hpe.conf - iSCSI"
     copy:
       src: hpe.conf
@@ -121,17 +144,17 @@
       group: root
       mode: 0644
     become: yes
-    
+
   - name: Set IP address in config file
-    ini_file: 
+    ini_file:
       dest: /etc/hpedockerplugin/hpe.conf
-      section: DEFAULT 
-      option: host_etcd_ip_address 
+      section: DEFAULT
+      option: host_etcd_ip_address
       value: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-      no_extra_spaces: true 
+      no_extra_spaces: true
       backup: yes
     become: yes
-    
+
   - name: create hpedockerplugin container
     docker_container:
       name: plugin_container
